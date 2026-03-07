@@ -7,6 +7,10 @@ export interface ModerationResult {
   reason: string;
 }
 
+type WorkersAITextModel = Parameters<ReturnType<typeof createWorkersAI>>[0];
+
+const TEXT_MODEL = "@cf/zai-org/glm-4.7-flash" satisfies WorkersAITextModel;
+
 export async function moderateComment(
   context: {
     env: Env;
@@ -28,8 +32,7 @@ export async function moderateComment(
   const workersAI = createWorkersAI({ binding: context.env.AI });
 
   const result = await generateText({
-    // @ts-expect-error 不知道为啥workers-ai-provider的类型定义不完整
-    model: workersAI("@cf/meta/llama-3.3-70b-instruct-fp8-fast"),
+    model: workersAI(TEXT_MODEL),
     messages: [
       {
         role: "system",
@@ -83,8 +86,7 @@ export async function summarizeText(context: { env: Env }, text: string) {
   const workersAI = createWorkersAI({ binding: context.env.AI });
 
   const result = await generateText({
-    // @ts-expect-error 不知道为啥workers-ai-provider的类型定义不完整
-    model: workersAI("@cf/meta/llama-3.3-70b-instruct-fp8-fast"),
+    model: workersAI(TEXT_MODEL),
     temperature: 0.3,
     messages: [
       {
@@ -121,8 +123,7 @@ export async function generateTags(
   const workersAI = createWorkersAI({ binding: context.env.AI });
 
   const result = await generateText({
-    // @ts-expect-error 不知道为啥workers-ai-provider的类型定义不完整
-    model: workersAI("@cf/meta/llama-3.3-70b-instruct-fp8-fast"),
+    model: workersAI(TEXT_MODEL),
     temperature: 0,
     messages: [
       {
